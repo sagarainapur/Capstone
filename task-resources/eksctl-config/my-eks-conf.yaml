@@ -75,7 +75,7 @@ nodeGroups: # Refer: https://github.com/weaveworks/eksctl/blob/main/examples/05-
         - t2.medium
     desiredCapacity: 1
     minSize: 0
-    maxSize: 3
+    maxSize: 5
     privateNetworking: true # include only in private subnet
     subnets:
       - my-private-201-a # 1 AZ is enough for testing
