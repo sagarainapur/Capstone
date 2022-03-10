@@ -21,3 +21,20 @@ spec:
               name: upg-loadme
               port:
                 number: 80
+
+---
+#checkout selectors & https://eskala.io/tutorial/the-node-js-developers-guide-to-kubernetes-part-ii/
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress
+spec:
+  selector:
+    app: MyApp
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+
