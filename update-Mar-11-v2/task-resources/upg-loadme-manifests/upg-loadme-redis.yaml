@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: demo
+  labels:
+    app: redis
+spec:
+  ports:
+  - port: 6379
+    name: web
+  clusterIP: None
+  selector:
+    app: redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: demo
+spec:
+  serviceName: "redis"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /var/lib/redis
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-ebs
+spec:
+  containers:
+  - image: k8s.gcr.io/test-webserver
+    name: test-container
+    resources:
+      requests:
+        cpu: 200m
+        memory: 200Mi
+      limits:
+        cpu: 200m
+        memory: 200Mi
+    volumeMounts:
+    - mountPath: /var/lib/redis
+      name: redis-volume
+
+  volumes:
+  - name: redis-volume
+    # This AWS EBS volume must already exist.
+    awsElasticBlockStore:
+      volumeID: "vol-0e519f3a1b2f86223"
+      fsType: ext4
+
+
