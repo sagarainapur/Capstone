@@ -13,9 +13,6 @@ spec:
     imagePullPolicy: IfNotPresent
     name: redis
   restartPolicy: Always
-  
-# needs to be deployment not pod!!!
-
 
 ---
 
