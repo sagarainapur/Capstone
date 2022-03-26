@@ -59,3 +59,18 @@ spec:
           # Provide the name of the ConfigMap you want to mount.
           name: redis-config
           # An array of keys from the ConfigMap to create as files visit: https://kubernetes.io/docs/concepts/configuration/configmap/#configmaps-and-pods
+          
+          
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+data:
+  # property-like keys; each key maps to a simple value
+  dir: "/var/lib/redis"
+  appendonly: "yes"
+  protected-mode: "no"
+  
+  
